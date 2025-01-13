@@ -2,6 +2,7 @@ const inputField = document.querySelector(".inputField");
 const main = document.querySelector(".resume-builder");
 const outputContainer = document.querySelector(".output_container");
 
+
 let isHidden = true;
 
 // view input form and resume preview
@@ -55,6 +56,10 @@ function hide() {
             </div>
             <button onclick="print()">Print Resume</button>
         `;
+        
+       
+          
+          
     } else {
         // Show the input form and hide the resume preview
         main.style.display = "block";
@@ -64,3 +69,5 @@ function hide() {
         outputContainer.innerHTML = "";
     }
 }
+
+
