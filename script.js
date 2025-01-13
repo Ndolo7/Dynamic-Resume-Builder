@@ -80,7 +80,7 @@ function hide() {
                     x: 10,
                     y: 10,
                     html2canvas: {
-                        
+                        scale: 0.70 // Slightly reduce scale to prevent content cutoff
                     }
                 });
             } catch (err) {
