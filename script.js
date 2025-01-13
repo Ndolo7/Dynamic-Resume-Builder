@@ -5,7 +5,7 @@ const outputContainer = document.querySelector(".output_container");
 
 let isHidden = true;
 
-// view input form and resume preview
+// show preview resume
 function hide() {
     if (isHidden) {
     
@@ -54,45 +54,36 @@ function hide() {
                     </div>
                 </div>
             </div>
-            <button id="download-btn">Print Resume</button>
+            <button id="download-btn" class="no-print">Download Resume</button>
 
         `;
 
         const downloadResume = () => {
             try {
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF();
                 const resumeElement = document.querySelector('.output');
+                const { jsPDF } = window.jspdf;
+                const printButton = document.querySelector('.no-print');
+                printButton.style.display = 'none';
                 
-                if (!resumeElement) {
-                throw new Error('Resume element not found');
-                }
-
-                pdf.html(resumeElement, {
-                    callback: function(doc) {
-                        try {
-                            doc.save('resume.pdf');
-                        } catch (err) {
-                          console.error('Error saving PDF:', err);
-                          alert('Failed to save PDF');
-                        }
-                    },
-                    x: 10,
-                    y: 10,
-                    html2canvas: {
-                        scale: 0.70 // Slightly reduce scale to prevent content cutoff
-                    }
+                html2canvas(resumeElement, { scale: 2 }).then(canvas => {
+                    // Convert the canvas to an image
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width; 
+            
+                    // Add the image to the PDF
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            
+                    // Save the PDF
+                    pdf.save('resume.pdf');
                 });
             } catch (err) {
               console.error('Error generating PDF:', err);
               alert('Failed to generate PDF');
             }
         };
-        document.getElementById('download-btn').addEventListener('click', downloadResume);
-
-        
-       
-          
+        document.getElementById('download-btn').addEventListener('click', downloadResume);          
           
     } else {
         // Show the input form 
