@@ -54,14 +54,48 @@ function hide() {
                     </div>
                 </div>
             </div>
-            <button onclick="print()">Print Resume</button>
+            <button id="download-btn">Print Resume</button>
+
         `;
+
+        const downloadResume = () => {
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+                const resumeElement = document.querySelector('.output');
+                
+                if (!resumeElement) {
+                throw new Error('Resume element not found');
+                }
+
+                pdf.html(resumeElement, {
+                    callback: function(doc) {
+                        try {
+                            doc.save('resume.pdf');
+                        } catch (err) {
+                          console.error('Error saving PDF:', err);
+                          alert('Failed to save PDF');
+                        }
+                    },
+                    x: 10,
+                    y: 10,
+                    html2canvas: {
+                        
+                    }
+                });
+            } catch (err) {
+              console.error('Error generating PDF:', err);
+              alert('Failed to generate PDF');
+            }
+        };
+        document.getElementById('download-btn').addEventListener('click', downloadResume);
+
         
        
           
           
     } else {
-        // Show the input form and hide the resume preview
+        // Show the input form 
         main.style.display = "block";
         isHidden = true;
 
